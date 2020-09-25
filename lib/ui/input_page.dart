@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:review_app/controllers/review_controller.dart';
 import 'package:review_app/models/review_model.dart';
+import 'package:review_app/widgets/custom_form_widget.dart';
 
 // ignore: must_be_immutable
 class InputPage extends StatelessWidget {
@@ -49,25 +50,26 @@ class InputPage extends StatelessWidget {
                 ),
               ),
             ),
-            FormField(
+            CustomFormField(
               title: 'Judul',
               controller: titleController,
               keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.words,
             ),
             SizedBox(height: 20),
-            FormField(
-              title: 'Pendapat Pribadi',
-              controller: reviewController,
-              minLines: 8,
-              keyboardType: TextInputType.multiline,
-            ),
+            CustomFormField(
+                title: 'Pendapat Pribadi',
+                controller: reviewController,
+                minLines: 8,
+                keyboardType: TextInputType.multiline,
+                textCapitalization: TextCapitalization.sentences),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Obx(
-                    () => FormField(
+                    () => CustomFormField(
                       title: 'Art Rating',
                       controller: artRatingController,
                       keyboardType: TextInputType.number,
@@ -93,44 +95,45 @@ class InputPage extends StatelessWidget {
                       suffixIcon: (isArtValid.value)
                           ? null
                           : Icon(Icons.error, color: Colors.red),
+                      suffixText: '/ 10',
                     ),
                   ),
                 ),
                 Expanded(
                   child: Obx(
-                    () => FormField(
-                      title: 'Story Rating',
-                      controller: storyRatingController,
-                      keyboardType: TextInputType.number,
-                      onChanged: (story) {
-                        if (int.parse(story) >= 0 && int.parse(story) <= 10) {
-                          isStoryValid.value = true;
-                        } else {
-                          isStoryValid.value = false;
-                          if (!Get.isSnackbarOpen) {
-                            Get.snackbar(
-                              "Nilai tidak valid",
-                              "Cukup berikan nilai 0 - 10",
-                              barBlur: 100,
-                              dismissDirection:
-                                  SnackDismissDirection.HORIZONTAL,
-                              duration: Duration(seconds: 3),
-                              margin:
-                                  EdgeInsets.only(top: 10, left: 16, right: 16),
-                            );
+                    () => CustomFormField(
+                        title: 'Story Rating',
+                        controller: storyRatingController,
+                        keyboardType: TextInputType.number,
+                        onChanged: (story) {
+                          if (int.parse(story) >= 0 && int.parse(story) <= 10) {
+                            isStoryValid.value = true;
+                          } else {
+                            isStoryValid.value = false;
+                            if (!Get.isSnackbarOpen) {
+                              Get.snackbar(
+                                "Nilai tidak valid",
+                                "Cukup berikan nilai 0 - 10",
+                                barBlur: 100,
+                                dismissDirection:
+                                    SnackDismissDirection.HORIZONTAL,
+                                duration: Duration(seconds: 3),
+                                margin: EdgeInsets.only(
+                                    top: 10, left: 16, right: 16),
+                              );
+                            }
                           }
-                        }
-                      },
-                      suffixIcon: (isStoryValid.value)
-                          ? null
-                          : Icon(Icons.error, color: Colors.red),
-                    ),
+                        },
+                        suffixIcon: (isStoryValid.value)
+                            ? null
+                            : Icon(Icons.error, color: Colors.red),
+                        suffixText: '/ 10'),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 20),
-            FormField(
+            CustomFormField(
               title: 'Tempat Baca',
               hintText:
                   'https://komikcast.com/komik/the-great-mage-returns-after-4000-years/',
@@ -159,18 +162,32 @@ class InputPage extends StatelessWidget {
                           double.parse(artRatingController.text);
                       editing.storyRating =
                           double.parse(storyRatingController.text);
-                      editing.link = linkController.text;
+                      if (linkController.text.trim().isNotEmpty &&
+                          (!linkController.text.trim().contains("https://") ||
+                              !linkController.text
+                                  .trim()
+                                  .contains("https://"))) {
+                        linkController.text =
+                            "https://" + linkController.text.trim();
+                      }
+                      editing.link = linkController.text.trim();
                       controller.reviews[index] = editing;
                       Get.back();
                     } else if (this.index.isNull) {
-                      if (linkController.text.trim().isEmpty)
-                        linkController.text = " ";
+                      if (linkController.text.trim().isNotEmpty &&
+                          (!linkController.text.trim().contains("https://") ||
+                              !linkController.text
+                                  .trim()
+                                  .contains("https://"))) {
+                        linkController.text =
+                            "https://" + linkController.text.trim();
+                      }
                       controller.reviews.add(ReviewModel(
                           title: titleController.text.trim(),
                           deskripsi: reviewController.text.trim(),
                           artRating: double.parse(artRatingController.text),
                           storyRating: double.parse(storyRatingController.text),
-                          link: linkController.text));
+                          link: linkController.text.trim()));
                       Get.back();
                     }
                   } else {
@@ -196,53 +213,5 @@ class InputPage extends StatelessWidget {
         ),
       ),
     ));
-  }
-}
-
-class FormField extends StatelessWidget {
-  final String title;
-  final String hintText;
-  final int maxLength;
-  final int minLines;
-  final TextEditingController controller;
-  final TextInputType keyboardType;
-  final Function onChanged;
-  final Widget suffixIcon;
-  const FormField(
-      {this.title,
-      this.maxLength,
-      this.minLines,
-      this.keyboardType,
-      this.controller,
-      this.onChanged,
-      this.suffixIcon,
-      this.hintText});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      child: TextFormField(
-        autocorrect: false,
-        textAlign: TextAlign.justify,
-        controller: controller,
-        maxLength: maxLength,
-        keyboardType: keyboardType,
-        maxLines: null,
-        minLines: minLines,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          suffixIcon: suffixIcon,
-          filled: true,
-          fillColor: Colors.white,
-          labelText: title,
-          hintText: hintText,
-          hintStyle: TextStyle(fontSize: 12, color: Colors.grey[400]),
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          labelStyle: TextStyle(fontSize: 20),
-          hoverColor: Colors.blue,
-        ),
-      ),
-    );
   }
 }

@@ -95,38 +95,62 @@ class HomePage extends StatelessWidget {
                               ),
                               SizedBox(height: 10),
                               RaisedButton(
-                                  color: (controller.reviews[index].link
-                                              .contains("https://") ||
-                                          controller.reviews[index].link
-                                              .contains("http://"))
-                                      ? Colors.green
-                                      : Colors.grey,
-                                  child: Text(
-                                    'Baca disini',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  elevation: 0,
-                                  onPressed: (controller.reviews[index].link
-                                              .contains("https://") ||
-                                          controller.reviews[index].link
-                                              .contains("http://"))
-                                      ? () async {
-                                          await _launchURL(
-                                              controller.reviews[index].link);
-                                        }
-                                      : () {
-                                          Get.defaultDialog(
-                                            title: 'Peringatan',
-                                            middleText:
-                                                'Tidak dapat membuka tautan, pastikan anda menggunakan awalan "https://" atau "http://" pada link yang di gunakan',
-                                            confirm: FlatButton(
-                                              onPressed: () {
-                                                Get.back();
-                                              },
-                                              child: Text('Ok'),
-                                            ),
-                                          );
-                                        }),
+                                color: (controller.reviews[index].link.isEmpty)
+                                    ? Colors.grey
+                                    : controller.reviews[index].link
+                                            .substring(
+                                                0,
+                                                controller.reviews[index].link
+                                                        .length -
+                                                    2)
+                                            .contains(".")
+                                        ? Colors.green
+                                        : Colors.grey,
+                                child: Text(
+                                  'Baca disini',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                elevation: 0,
+                                onPressed: () async {
+                                  if (controller
+                                      .reviews[index].link.isNotEmpty) {
+                                    if (controller.reviews[index].link
+                                        .substring(
+                                            0,
+                                            controller.reviews[index].link
+                                                    .length -
+                                                2)
+                                        .contains(".")) {
+                                      await _launchURL(
+                                          controller.reviews[index].link);
+                                    } else {
+                                      Get.defaultDialog(
+                                        title: 'Peringatan',
+                                        middleText:
+                                            'Tidak dapat membuka tautan, pastikan Link yang anda gunakan sudah benar',
+                                        confirm: FlatButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          child: Text('OK'),
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    Get.defaultDialog(
+                                      title: 'Peringatan',
+                                      middleText:
+                                          'Tidak dapat membuka tautan, pastikan Link yang anda gunakan sudah benar',
+                                      confirm: FlatButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        child: Text('OK'),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
                               Divider(),
                               Row(
                                 mainAxisAlignment:
@@ -185,7 +209,7 @@ class HomePage extends StatelessWidget {
   _launchURL(String link) async {
     final url = link;
     if (await canLaunch(url)) {
-      await launch(url);
+      await launch(url, forceWebView: true, enableJavaScript: true);
     } else {
       throw 'Could not launch $url';
     }
