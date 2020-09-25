@@ -1,6 +1,6 @@
 # review_app
 
-A new Flutter application.
+Review App adalah sebuah aplikasi yang berfungsi untuk memberikan review pada komik yang sudah pernah kalian baca
 
 ## Getting Started
 
