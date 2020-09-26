@@ -1,5 +1,6 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:review_app/controllers/review_controller.dart';
@@ -121,8 +122,10 @@ class HomePage extends StatelessWidget {
                                                     .length -
                                                 2)
                                         .contains(".")) {
-                                      await _launchURL(
-                                          controller.reviews[index].link);
+                                      // await _launchURL(
+                                      //     controller.reviews[index].link);
+                                      Get.to(MyWebView(
+                                          controller.reviews[index].link));
                                     } else {
                                       Get.defaultDialog(
                                         title: 'Peringatan',
@@ -209,9 +212,61 @@ class HomePage extends StatelessWidget {
   _launchURL(String link) async {
     final url = link;
     if (await canLaunch(url)) {
-      await launch(url, forceWebView: true, enableJavaScript: true);
+      await launch(
+        url,
+        forceWebView: true,
+        enableJavaScript: true,
+      );
     } else {
       throw 'Could not launch $url';
     }
+  }
+}
+
+class MyWebView extends StatefulWidget {
+  MyWebView(this.title);
+  final String title;
+
+  @override
+  _MyWebViewState createState() => _MyWebViewState();
+}
+
+class _MyWebViewState extends State<MyWebView> {
+  final flutterWebviewPlugin = new FlutterWebviewPlugin();
+  @override
+  void dispose() {
+    flutterWebviewPlugin.dispose();
+    print('============== Dispos dipanggil==============');
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        await flutterWebviewPlugin.cleanCookies();
+        await flutterWebviewPlugin.clearCache();
+        // flutterWebviewPlugin.dispose();
+        print('============== WillPopScope dipanggil==============');
+        Get.offAll(HomePage());
+        return;
+      },
+      child: WebviewScaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () async {
+                  await flutterWebviewPlugin.reload();
+                  print('refresh');
+                }),
+          ],
+        ),
+        url: widget.title,
+        appCacheEnabled: false,
+        withZoom: true,
+        withJavascript: true,
+      ),
+    );
   }
 }
