@@ -1,15 +1,13 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:review_app/controllers/review_controller.dart';
 import 'package:review_app/ui/input_page.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:review_app/ui/webview_page.dart';
 
 class HomePage extends StatelessWidget {
   final ReviewController controller = Get.put(ReviewController());
-  final GlobalKey<ExpansionTileCardState> cardA = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,80 +20,130 @@ class HomePage extends StatelessWidget {
         title: Center(
           child: Text(
             'My Review',
-            style: GoogleFonts.cookie(fontSize: 32),
+            style: TextStyle(fontFamily: 'Cookie', fontSize: 32),
           ),
         ),
       ),
       body: Obx(
         () => ListView.builder(
-            itemCount: controller.reviews.length,
-            itemBuilder: (_, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    ExpansionTileCard(
-                      elevation: 2,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                      title: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(child: Text('Title')),
-                              Expanded(
-                                child: Text(controller.reviews[index].title,
-                                    softWrap: true),
-                              )
-                            ],
-                          ),
-                          Divider()
-                        ],
-                      ),
-                      subtitle: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(child: Text('Art Rating')),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.star, color: Colors.yellow),
-                                    Text(controller.reviews[index].artRating
-                                        .toString())
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(child: Text('Story Rating')),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.star, color: Colors.yellow),
-                                    Text(controller.reviews[index].storyRating
-                                        .toString()),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+          itemCount: controller.reviews.length,
+          itemBuilder: (_, index) {
+            var tags = controller.reviews[index].tag;
+            print(tags);
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  ExpansionTileCard(
+                    elevation: 2,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                    title: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Divider(),
-                              //Text('My Review'),
-                              Text(
-                                controller.reviews[index].deskripsi,
-                                textAlign: TextAlign.justify,
+                        Row(
+                          children: [
+                            Expanded(child: Text('Title')),
+                            Expanded(
+                              child: Text(controller.reviews[index].title,
+                                  softWrap: true),
+                            )
+                          ],
+                        ),
+                        Divider()
+                      ],
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(child: Text('Type')),
+                            Expanded(
+                              child: Text(
+                                (controller.reviews[index].comic != "")
+                                    ? controller.reviews[index].comic
+                                    : "N/A",
                               ),
-                              SizedBox(height: 10),
-                              RaisedButton(
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(child: Text('Art Rating')),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Icon(Icons.star, color: Colors.yellow),
+                                  Text(controller.reviews[index].artRating
+                                      .toString())
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(child: Text('Story Rating')),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Icon(Icons.star, color: Colors.yellow),
+                                  Text(controller.reviews[index].storyRating
+                                      .toString()),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        (!tags.isNullOrBlank)
+                            ? Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: tags
+                                    .map(
+                                      (e) => Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                        margin:
+                                            EdgeInsets.only(top: 5, right: 5),
+
+                                        /// Capital
+                                        child: Text(
+                                          e.toString().trim(),
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              )
+                            : Container()
+
+                        // (tags != [])
+                        //     ? Container(
+                        //         width: 10, height: 10, color: Colors.red)
+                        //     : Container(
+                        //         width: 10, height: 10, color: Colors.blue),
+                      ],
+                    ),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Divider(),
+                            //Text('My Review'),
+                            Text(
+                              controller.reviews[index].deskripsi,
+                              textAlign: TextAlign.justify,
+                            ),
+                            SizedBox(height: 10),
+                            ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                              child: RaisedButton(
                                 color: (controller.reviews[index].link.isEmpty)
                                     ? Colors.grey
                                     : controller.reviews[index].link
@@ -122,9 +170,7 @@ class HomePage extends StatelessWidget {
                                                     .length -
                                                 2)
                                         .contains(".")) {
-                                      // await _launchURL(
-                                      //     controller.reviews[index].link);
-                                      Get.to(MyWebView(
+                                      Get.to(MyWebview(
                                           controller.reviews[index].link));
                                     } else {
                                       Get.defaultDialog(
@@ -154,118 +200,58 @@ class HomePage extends StatelessWidget {
                                   }
                                 },
                               ),
-                              Divider(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: Colors.green,
-                                      ),
-                                      onPressed: () {
-                                        Get.to(InputPage(index: index));
-                                      }),
-                                  IconButton(
+                            ),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
                                     icon: Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
+                                      Icons.edit,
+                                      color: Colors.green,
                                     ),
                                     onPressed: () {
-                                      Get.defaultDialog(
-                                        title: 'Peringatan',
-                                        middleText:
-                                            'Apakah anda yakin untuk menghapus ?',
-                                        confirm: FlatButton(
-                                          onPressed: () {
-                                            controller.reviews.removeAt(index);
-                                            Get.back();
-                                          },
-                                          child: Text('Ya'),
-                                        ),
-                                        cancel: FlatButton(
-                                          onPressed: () {
-                                            Get.back();
-                                          },
-                                          child: Text('Batal'),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    Divider(),
-                  ],
-                ),
-              );
-            }),
-      ),
-    );
-  }
-
-  _launchURL(String link) async {
-    final url = link;
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceWebView: true,
-        enableJavaScript: true,
-      );
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-}
-
-class MyWebView extends StatefulWidget {
-  MyWebView(this.title);
-  final String title;
-
-  @override
-  _MyWebViewState createState() => _MyWebViewState();
-}
-
-class _MyWebViewState extends State<MyWebView> {
-  final flutterWebviewPlugin = new FlutterWebviewPlugin();
-  @override
-  void dispose() {
-    flutterWebviewPlugin.dispose();
-    print('============== Dispos dipanggil==============');
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        await flutterWebviewPlugin.cleanCookies();
-        await flutterWebviewPlugin.clearCache();
-        // flutterWebviewPlugin.dispose();
-        print('============== WillPopScope dipanggil==============');
-        Get.offAll(HomePage());
-        return;
-      },
-      child: WebviewScaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () async {
-                  await flutterWebviewPlugin.reload();
-                  print('refresh');
-                }),
-          ],
+                                      Get.to(InputPage(index: index));
+                                    }),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    Get.defaultDialog(
+                                      title: 'Peringatan',
+                                      middleText:
+                                          'Apakah anda yakin untuk menghapus ?',
+                                      confirm: FlatButton(
+                                        onPressed: () {
+                                          controller.reviews.removeAt(index);
+                                          Get.back();
+                                        },
+                                        child: Text('Ya'),
+                                      ),
+                                      cancel: FlatButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        child: Text('Batal'),
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Divider(),
+                ],
+              ),
+            );
+          },
         ),
-        url: widget.title,
-        appCacheEnabled: false,
-        withZoom: true,
-        withJavascript: true,
       ),
     );
   }
