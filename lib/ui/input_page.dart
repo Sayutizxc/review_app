@@ -2,26 +2,17 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:review_app/controllers/review_controller.dart';
+import 'package:review_app/controllers/tag_controller.dart';
 import 'package:review_app/models/review_model.dart';
 import 'package:review_app/widgets/custom_form_widget.dart';
 
 // ignore: must_be_immutable
 class InputPage extends StatelessWidget {
+  TagsController tagsController = Get.put(TagsController());
   InputPage({this.index});
   int index;
   var typeSelected = "".obs;
   RxList<dynamic> tagSelected = [].obs;
-  RxList<dynamic> tag = [
-    "Action",
-    "Comedy",
-    "Drama",
-    "Fantasy",
-    "Horror",
-    "Magic",
-    "Psychological",
-    "Romance",
-    "School",
-  ].obs;
   List<String> select = ["Manga", "Manhua", "Manhwa", "VN", "LN", "Other"];
   final ReviewController controller = Get.find();
 
@@ -42,13 +33,14 @@ class InputPage extends StatelessWidget {
       story = controller.reviews[index].storyRating;
       link = controller.reviews[index].link;
       typeSelected.value = controller.reviews[index].comic;
-      tag.addAllIf(!tag.contains(controller.reviews[index].tag),
+      tagsController.tags.addAllIf(
+          !tagsController.tags.contains(controller.reviews[index].tag),
           controller.reviews[index].tag.map<String>((e) => e));
-      tag = tag.toSet().toList().obs;
+      tagsController.tags = tagsController.tags.toSet().toList().obs;
       tagSelected.addAll(controller.reviews[index].tag);
     }
     TextEditingController titleController = TextEditingController(text: title);
-    print(tag.toString());
+    print("Input Page ${tagsController.tags.toList().toString()}");
     TextEditingController tagController = TextEditingController();
     TextEditingController reviewController =
         TextEditingController(text: review);
@@ -187,12 +179,12 @@ class InputPage extends StatelessWidget {
                               .toList(),
                         ),
                         Wrap(
-                          children: tag
+                          children: tagsController.tags
                               .map(
                                 (tagValue) => SelectTag(
                                   text: tagValue,
                                   onDelete: () {
-                                    tag.remove(tagValue);
+                                    tagsController.tags.remove(tagValue);
                                   },
                                   isSelected: tagSelected.contains(tagValue),
                                   onTap: () {
@@ -219,8 +211,9 @@ class InputPage extends StatelessWidget {
                     suffixIcon: IconButton(
                         icon: Icon(Icons.send),
                         onPressed: () {
-                          if (!tag.contains(tagController.text)) {
-                            tag.add(tagController.text);
+                          if (!tagsController.tags
+                              .contains(tagController.text)) {
+                            tagsController.tags.add(tagController.text);
                           }
                           tagController.clear();
                         }),

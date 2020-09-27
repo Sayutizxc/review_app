@@ -142,7 +142,7 @@ class HomePage extends StatelessWidget {
                             SizedBox(height: 10),
                             ClipRRect(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(30)),
+                                  BorderRadius.all(Radius.circular(40)),
                               child: RaisedButton(
                                 color: (controller.reviews[index].link.isEmpty)
                                     ? Colors.grey
