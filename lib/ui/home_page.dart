@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                             Expanded(
                               child: Text(controller.reviews[index].title,
                                   softWrap: true),
-                            )
+                            ),
                           ],
                         ),
                         Divider()
@@ -108,8 +108,6 @@ class HomePage extends StatelessWidget {
                                             EdgeInsets.fromLTRB(10, 5, 10, 5),
                                         margin:
                                             EdgeInsets.only(top: 5, right: 5),
-
-                                        /// Capital
                                         child: Text(
                                           e.toString().trim(),
                                           style: TextStyle(color: Colors.white),
@@ -118,13 +116,7 @@ class HomePage extends StatelessWidget {
                                     )
                                     .toList(),
                               )
-                            : Container()
-
-                        // (tags != [])
-                        //     ? Container(
-                        //         width: 10, height: 10, color: Colors.red)
-                        //     : Container(
-                        //         width: 10, height: 10, color: Colors.blue),
+                            : Container(),
                       ],
                     ),
                     children: [
@@ -133,7 +125,6 @@ class HomePage extends StatelessWidget {
                         child: Column(
                           children: [
                             Divider(),
-                            //Text('My Review'),
                             Text(
                               controller.reviews[index].deskripsi,
                               textAlign: TextAlign.justify,
