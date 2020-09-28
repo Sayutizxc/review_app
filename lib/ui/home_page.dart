@@ -7,7 +7,6 @@ import 'package:review_app/ui/webview_page.dart';
 
 class HomePage extends StatelessWidget {
   final ReviewController controller = Get.put(ReviewController());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

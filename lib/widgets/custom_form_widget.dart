@@ -48,7 +48,7 @@ class CustomFormField extends StatelessWidget {
           hintStyle: TextStyle(fontSize: 12, color: Colors.grey[400]),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelStyle: TextStyle(fontSize: 20),
-          hoverColor: Colors.blue,
+          //hoverColor: Colors.blue,
         ),
       ),
     );
