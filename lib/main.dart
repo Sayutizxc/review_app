@@ -8,6 +8,9 @@ void main() async {
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     defaultTransition: Transition.fade,
+    theme: ThemeData.dark().copyWith(
+      accentColor: Colors.white,
+    ),
     home: HomePage(),
   ));
 }

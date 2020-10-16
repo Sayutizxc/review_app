@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:review_app/ui/home_page.dart';
 
 class MyWebview extends StatefulWidget {
-  MyWebview(this.title);
-  final String title;
+  MyWebview(this.link);
+  final String link;
 
   @override
   _MyWebviewState createState() => _MyWebviewState();
@@ -13,33 +13,12 @@ class MyWebview extends StatefulWidget {
 
 class _MyWebviewState extends State<MyWebview> {
   final flutterWebviewPlugin = new FlutterWebviewPlugin();
-  // StreamSubscription<WebViewStateChanged> _onchanged;
+
   @override
   void dispose() {
     super.dispose();
     flutterWebviewPlugin.dispose();
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _onchanged =
-  //       flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
-  //         if (mounted) {
-  //           if (state.type == WebViewState.finishLoad) {
-  //             // if the full website page loaded
-  //             print("loaded...");
-  //           } else if (state.type == WebViewState.abortLoad) {
-  //             // if there is a problem with loading the url
-  //             print("there is a problem...");
-  //           } else if (state.type == WebViewState.startLoad) {
-  //             // if the url started loading
-  //             print("start loading...");
-  //             return Center(child: CircularProgressIndicator());
-  //           }
-  //         }
-  //       });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +57,7 @@ class _MyWebviewState extends State<MyWebview> {
             SizedBox(width: 10),
           ],
         ),
-        url: widget.title,
+        url: widget.link,
         appCacheEnabled: true,
         clearCache: true,
         clearCookies: true,

@@ -40,15 +40,14 @@ class CustomFormField extends StatelessWidget {
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Colors.black45,
           labelText: title,
           hintText: hintText,
           suffixText: suffixText,
           suffixStyle: TextStyle(fontSize: 18, color: Colors.grey[400]),
-          hintStyle: TextStyle(fontSize: 12, color: Colors.grey[400]),
+          hintStyle: TextStyle(fontSize: 12, color: Colors.grey),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelStyle: TextStyle(fontSize: 20),
-          //hoverColor: Colors.blue,
         ),
       ),
     );

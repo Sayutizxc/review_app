@@ -15,9 +15,8 @@ class InputPage extends StatelessWidget {
   int index;
   var typeSelected = "".obs;
   RxList<dynamic> tagSelected = [].obs;
-  List<String> select = ["Manga", "Manhua", "Manhwa", "VN", "LN", "Other"];
+  List<String> select = ["Manga", "Manhua", "Manhwa", "Other"];
   final ReviewController controller = Get.find();
-
   @override
   Widget build(BuildContext context) {
     var isArtValid = true.obs;
@@ -100,6 +99,7 @@ class InputPage extends StatelessWidget {
                                 "Nilai tidak valid",
                                 "Cukup berikan nilai 0 - 10",
                                 barBlur: 100,
+                                colorText: Colors.white,
                                 dismissDirection:
                                     SnackDismissDirection.HORIZONTAL,
                                 duration: Duration(seconds: 3),
@@ -133,6 +133,7 @@ class InputPage extends StatelessWidget {
                                   "Nilai tidak valid",
                                   "Cukup berikan nilai 0 - 10",
                                   barBlur: 100,
+                                  colorText: Colors.white,
                                   dismissDirection:
                                       SnackDismissDirection.HORIZONTAL,
                                   duration: Duration(seconds: 3),
@@ -153,14 +154,15 @@ class InputPage extends StatelessWidget {
               SizedBox(height: 20),
               CustomFormField(
                 title: 'Source [Optional]',
-                hintText:
-                    'https://komikcast.com/komik/the-great-mage-returns-after-4000-years/',
+                hintText: 'https://tapas.io/series/the-poem-of-aster-and-hana',
                 controller: linkController,
                 keyboardType: TextInputType.text,
               ),
               ExpansionTileCard(
                 elevation: 0,
                 initialElevation: 0,
+                //baseColor: ,
+                expandedColor: Get.theme.canvasColor,
                 shadowColor: Colors.white.withOpacity(0.5),
                 title: Text('Advanced Review'),
                 children: [
@@ -206,8 +208,8 @@ class InputPage extends StatelessWidget {
                   SizedBox(height: 20),
                   CustomFormField(
                     controller: tagController,
-                    title: "Tag [Opsional]",
-                    hintText: "Action, Comedy, Fantasy, Dll",
+                    title: "Add New Tags",
+                    hintText: "Action, Comedy, Fantasy, Etc",
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
                     suffixIcon: IconButton(
@@ -284,6 +286,7 @@ class InputPage extends StatelessWidget {
                           "Gagal Menyimpan !!",
                           "Pastikan semua kolom sudah diisi dengan sesuai",
                           barBlur: 100,
+                          colorText: Colors.white,
                           dismissDirection: SnackDismissDirection.HORIZONTAL,
                           duration: Duration(seconds: 3),
                           margin: EdgeInsets.only(top: 10, left: 16, right: 16),

@@ -11,6 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xfffee715),
           child: Icon(Icons.add),
           onPressed: () {
             Get.to(InputPage(), transition: Transition.cupertino);
@@ -33,107 +34,119 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  ExpansionTileCard(
-                    elevation: 2,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                    title: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(child: Text('Title')),
-                            Expanded(
-                              child: Text(controller.reviews[index].title,
-                                  softWrap: true),
-                            ),
-                          ],
-                        ),
-                        Divider()
-                      ],
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(child: Text('Type')),
-                            Expanded(
-                              child: Text(
-                                (controller.reviews[index].comic != "")
-                                    ? controller.reviews[index].comic
-                                    : "N/A",
+                  Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 5,
+                          offset: Offset(0, 0),
+                          spreadRadius: 2),
+                    ], borderRadius: BorderRadius.circular(8.0)),
+                    child: ExpansionTileCard(
+                      initialElevation: 0,
+                      elevation: 0,
+                      shadowColor: Colors.black,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                      title: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Title',
+                                ),
                               ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(child: Text('Art Rating')),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.star, color: Colors.yellow),
-                                  Text(controller.reviews[index].artRating
-                                      .toString())
-                                ],
+                              Expanded(
+                                child: Text(controller.reviews[index].title,
+                                    softWrap: true),
                               ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(child: Text('Story Rating')),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.star, color: Colors.yellow),
-                                  Text(controller.reviews[index].storyRating
-                                      .toString()),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        (!tags.isNullOrBlank)
-                            ? Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                children: tags
-                                    .map(
-                                      (e) => Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                        margin:
-                                            EdgeInsets.only(top: 5, right: 5),
-                                        child: Text(
-                                          e.toString().trim(),
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
+                            ],
+                          ),
+                          Divider()
+                        ],
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(child: Text('Type')),
+                              Expanded(
+                                child: Text(
+                                  (controller.reviews[index].comic != "")
+                                      ? controller.reviews[index].comic
+                                      : "N/A",
+                                ),
                               )
-                            : Container(),
-                      ],
-                    ),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Divider(),
-                            Text(
-                              controller.reviews[index].deskripsi,
-                              textAlign: TextAlign.justify,
-                            ),
-                            SizedBox(height: 10),
-                            ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(40)),
-                              child: RaisedButton(
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(child: Text('Art Rating')),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.star, color: Colors.yellow),
+                                    Text(controller.reviews[index].artRating
+                                        .toString())
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(child: Text('Story Rating')),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.star, color: Colors.yellow),
+                                    Text(controller.reviews[index].storyRating
+                                        .toString()),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          (!tags.isNullOrBlank)
+                              ? Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.start,
+                                  children: tags
+                                      .map(
+                                        (e) => Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          padding:
+                                              EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                          margin:
+                                              EdgeInsets.only(top: 5, right: 5),
+                                          child: Text(
+                                            e.toString().trim(),
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Divider(),
+                              Text(
+                                controller.reviews[index].deskripsi,
+                                textAlign: TextAlign.justify,
+                              ),
+                              SizedBox(height: 10),
+                              RaisedButton(
                                 color: (controller.reviews[index].link.isEmpty)
                                     ? Colors.grey
                                     : controller.reviews[index].link
@@ -190,53 +203,53 @@ class HomePage extends StatelessWidget {
                                   }
                                 },
                               ),
-                            ),
-                            Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                IconButton(
+                              Divider(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: Colors.green,
+                                      ),
+                                      onPressed: () {
+                                        Get.to(InputPage(index: index));
+                                      }),
+                                  IconButton(
                                     icon: Icon(
-                                      Icons.edit,
-                                      color: Colors.green,
+                                      Icons.delete,
+                                      color: Colors.red,
                                     ),
                                     onPressed: () {
-                                      Get.to(InputPage(index: index));
-                                    }),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () {
-                                    Get.defaultDialog(
-                                      title: 'Peringatan',
-                                      middleText:
-                                          'Apakah anda yakin untuk menghapus ?',
-                                      confirm: FlatButton(
-                                        onPressed: () {
-                                          controller.reviews.removeAt(index);
-                                          Get.back();
-                                        },
-                                        child: Text('Ya'),
-                                      ),
-                                      cancel: FlatButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: Text('Batal'),
-                                      ),
-                                    );
-                                  },
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                                      Get.defaultDialog(
+                                        title: 'Peringatan',
+                                        middleText:
+                                            'Apakah anda yakin untuk menghapus ?',
+                                        confirm: FlatButton(
+                                          onPressed: () {
+                                            controller.reviews.removeAt(index);
+                                            Get.back();
+                                          },
+                                          child: Text('Ya'),
+                                        ),
+                                        cancel: FlatButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          child: Text('Batal'),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                  Divider(),
                 ],
               ),
             );
